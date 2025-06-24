@@ -30,7 +30,6 @@ def url_maker(location, meal):
 
     return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName={meal}'
 
-
 def get_all_meals(hall):
     ''' returns breakfast, lunch, and dinner in a set '''
     content = get_website_content(url_maker(hall, 'Breakfast'))
