@@ -30,6 +30,7 @@ def url_maker(location, meal):
     return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate={date[0]}%2f{date[1]}%2f{date[2]}&mealName={meal}'
 
 def get_all_meals(hall):
+    ''' returns breakfast, lunch, and dinner in a set '''
     content = get_website_content(url_maker(hall, 'Breakfast'))
     breakfast = extract_menu_items(content)
     content = get_website_content(url_maker(hall, 'Lunch'))
@@ -40,5 +41,6 @@ def get_all_meals(hall):
 
 hall = input('select dining hall: ')
 all_meals = get_all_meals(hall)
-for i in all_meals:
-    print(i)
+print('Breakfast\n', all_meals[0], '\n')
+print('Lunch\n', all_meals[1], '\n')
+print('Dinner\n', all_meals[2], '\n')
