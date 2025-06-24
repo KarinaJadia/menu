@@ -38,7 +38,7 @@
       const selectedMeal = document.getElementById('mealSelect').value;
       const locNum = options[location];
       const output = document.getElementById('output');
-      output.textContent = `loading ${location} menu...`;
+      output.textContent = `loading ${location.toLowerCase()} menu...`;
 
       const mealsToFetch = selectedMeal === 'All' ? ['Breakfast', 'Lunch', 'Dinner'] : [selectedMeal];
 
