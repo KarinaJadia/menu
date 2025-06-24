@@ -25,7 +25,7 @@
         const locNum = options[location];
         const meals = ['Breakfast', 'Lunch', 'Dinner'];
         const output = document.getElementById('output');
-        output.textContent = `Loading ${location} menu...`;
+        output.textContent = `loading ${location} menu...`;
 
         Promise.all(meals.map(meal => {
         const url = `https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=${locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName=${meal}`;
@@ -45,7 +45,7 @@
         }))
         .then(results => {
         output.innerHTML = `<h3>${location} Dining Hall Menu</h3>` + results.map(({ meal, items }) =>
-            `<strong>${meal}</strong><br>${items.join(', ') || 'No items found'}<br><br>`
+            `<strong>${meal}</strong><br>${items.join('<br>') || 'no items found'}<br><br>`
         ).join('');
         })
         .catch(error => {
