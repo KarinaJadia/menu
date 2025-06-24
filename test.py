@@ -27,7 +27,10 @@ def url_maker(location, meal):
 
     date = datetime.today().strftime(f'%m %d %Y').split()
 
-    return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate={date[0]}%2f{date[1]}%2f{date[2]}&mealName={meal}'
+    # return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate={date[0]}%2f{date[1]}%2f{date[2]}&mealName={meal}'
+
+    return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName={meal}'
+
 
 def get_all_meals(hall):
     ''' returns breakfast, lunch, and dinner in a set '''
