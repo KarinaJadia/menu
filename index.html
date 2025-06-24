@@ -47,7 +47,7 @@
 
       Promise.all(mealsToFetch.map(meal => {
         const url = `https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=${locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName=${meal}`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // need to bypass CORS shit
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // needed to bypass CORS shit
 
         return fetch(proxyUrl)
           .then(response => {
