@@ -16,9 +16,24 @@ def extract_menu_items(content):
     menu_items = [item.get_text(strip=True) for item in soup.select('div.longmenucoldispname a')]
     return menu_items
 
-def url_maker():
-    url = f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=16&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate=06%2f24%2f2025&mealName=Breakfast'
-    return url
+def url_maker(location, meal):
+    ''' makes url; takes date, location, and meal '''
 
-content = get_website_content(url_maker())
-print(extract_menu_items(content))
+    options = {'Connecticut': '03', 'North': '07', 'Putnam': '06',
+               'Towers': '42', 'Northwest': '15', 'Whitney': '01',
+               'McMahon': '05', 'South': '16'}
+    locNum = options[location] # picks location
+
+    return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate=06%2f24%2f2025&mealName={meal}'
+
+def get_all_meals(hall):
+    content = get_website_content(url_maker(hall, 'Breakfast'))
+    breakfast = extract_menu_items(content)
+    content = get_website_content(url_maker(hall, 'Lunch'))
+    lunch = extract_menu_items(content)
+    content = get_website_content(url_maker(hall, 'Dinner'))
+    dinner = extract_menu_items(content)
+    return breakfast, lunch, dinner
+
+hall = input('select dining hall: ')
+print(get_all_meals(hall))
