@@ -3,7 +3,7 @@
 <body>
   <h2>select a dining hall</h2>
 
-  <!-- Dining Hall Buttons -->
+  <!-- dining hall buttons -->
   <button onclick="getMenu('Connecticut')">Connecticut</button>
   <button onclick="getMenu('North')">North</button>
   <button onclick="getMenu('Putnam')">Putnam</button>
@@ -13,7 +13,7 @@
   <button onclick="getMenu('McMahon')">McMahon</button>
   <button onclick="getMenu('South')">South</button>
 
-  <!-- Meal Dropdown -->
+  <!-- meal dropdown -->
   <p>
     <label for="mealSelect">select a meal:</label>
     <select id="mealSelect">
@@ -24,18 +24,21 @@
     </select>
   </p>
 
-  <!-- Output -->
+  <!-- menu output -->
   <p id="output">menu will appear here</p>
 
   <script>
     function getMenu(location) {
+      // literally test.py logic in javascript
+
+      // corresponding location nums for URL
       const options = {
         'Connecticut': '03', 'North': '07', 'Putnam': '06',
         'Towers': '42', 'Northwest': '15', 'Whitney': '01',
         'McMahon': '05', 'South': '16'
       };
 
-      const selectedMeal = document.getElementById('mealSelect').value;
+      const selectedMeal = document.getElementById('mealSelect').value; // optional filtering
       const locNum = options[location];
       const output = document.getElementById('output');
       output.textContent = `loading ${location.toLowerCase()} menu...`;
@@ -44,21 +47,21 @@
 
       Promise.all(mealsToFetch.map(meal => {
         const url = `https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=${locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName=${meal}`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`; // need to bypass CORS shit
 
         return fetch(proxyUrl)
           .then(response => {
             if (!response.ok) throw new Error("Network response was not ok.");
             return response.json();
           })
-          .then(data => {
+          .then(data => { // pull actual menu
             const parser = new DOMParser();
             const doc = parser.parseFromString(data.contents, 'text/html');
             const items = Array.from(doc.querySelectorAll('div.longmenucoldispname a')).map(a => a.textContent.trim());
             return { meal, items };
           });
       }))
-      .then(results => {
+      .then(results => { // output menu prettily
         output.innerHTML = `<h3>${location.toLowerCase()} menu</h3>` + results.map(({ meal, items }) =>
           `<strong>${meal}</strong><br>${items.join('<br>') || 'no items found'}<br><br>`
         ).join('');
