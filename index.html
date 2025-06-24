@@ -16,18 +16,23 @@
 
   <script>
     function getMenu(message) {
-        fetch('https://example.com')
-        .then(response => response.text())
-        .then(html => {
-            // Parse the HTML string into a DOM
+        const url = 'https://example.com';
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+
+        fetch(proxyUrl)
+        .then(response => response.json())
+        .then(data => {
+            const html = data.contents;
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
 
-            // Extract data, e.g., all links
-            const links = Array.from(doc.querySelectorAll('a')).map(a => a.href);
-            document.getElementById("output").textContent = links
+            // Example: extract all headings
+            const headings = Array.from(doc.querySelectorAll('h1, h2, h3')).map(h => h.textContent);
+            console.log(headings);
         })
-    //   document.getElementById("output").textContent = message;
+        .catch(error => console.error('Error:', error));
+
+    // document.getElementById("output").textContent = message;
     }
   </script>
 </body>
