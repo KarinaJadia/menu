@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 def get_website_content(url):
     ''' gets raw html content '''
@@ -24,7 +25,9 @@ def url_maker(location, meal):
                'McMahon': '05', 'South': '16'}
     locNum = options[location] # picks location
 
-    return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate=06%2f24%2f2025&mealName={meal}'
+    date = datetime.today().strftime(f'%m %d %Y').split()
+
+    return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate={date[0]}%2f{date[1]}%2f{date[2]}&mealName={meal}'
 
 def get_all_meals(hall):
     content = get_website_content(url_maker(hall, 'Breakfast'))
@@ -36,4 +39,6 @@ def get_all_meals(hall):
     return breakfast, lunch, dinner
 
 hall = input('select dining hall: ')
-print(get_all_meals(hall))
+all_meals = get_all_meals(hall)
+for i in all_meals:
+    print(i)
