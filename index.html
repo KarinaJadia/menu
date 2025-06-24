@@ -16,23 +16,23 @@
 
   <script>
     function getMenu(message) {
-        const url = 'https://example.com';
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const url = 'https://example.com'; // Replace with the actual URL you want to scrape
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
 
-        fetch(proxyUrl)
-        .then(response => response.json())
+    fetch(proxyUrl)
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok.");
+            return response.json();
+        })
         .then(data => {
             const html = data.contents;
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
 
-            // Example: extract all headings
             const headings = Array.from(doc.querySelectorAll('h1, h2, h3')).map(h => h.textContent);
             console.log(headings);
         })
         .catch(error => console.error('Error:', error));
-
-    // document.getElementById("output").textContent = message;
     }
   </script>
 </body>
