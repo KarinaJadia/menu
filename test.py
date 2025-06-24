@@ -25,8 +25,7 @@ def url_maker(location, meal):
                'McMahon': '05', 'South': '16'}
     locNum = options[location] # picks location
 
-    date = datetime.today().strftime(f'%m %d %Y').split()
-
+    # date = datetime.today().strftime(f'%m %d %Y').split() # lowkey don't need meal
     # return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&dtdate={date[0]}%2f{date[1]}%2f{date[2]}&mealName={meal}'
 
     return f'https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum={locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName={meal}'
