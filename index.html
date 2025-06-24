@@ -3,24 +3,31 @@
 <body>
   <h2>select a dining hall</h2>
 
-  Connecticut': '03', 'North': '07', 'Putnam': '06',
-               'Towers': '42', 'Northwest': '15', 'Whitney': '01',
-               'McMahon': '05', 'South
-
-  <button onclick="displayMessage('You clicked Button 1')">Connecticut</button>
-  <button onclick="displayMessage('You clicked Button 2')">North</button>
-  <button onclick="displayMessage('You clicked Button 3')">Putnam</button>
-  <button onclick="displayMessage('You clicked Button 1')">Towers</button>
-  <button onclick="displayMessage('You clicked Button 2')">Northwest</button>
-  <button onclick="displayMessage('You clicked Button 3')">Whitney</button>
-  <button onclick="displayMessage('You clicked Button 1')">McMahon</button>
-  <button onclick="displayMessage('You clicked Button 2')">South</button>
+  <button onclick="getMenu('Connecticut')">Connecticut</button>
+  <button onclick="getMenu('North')">North</button>
+  <button onclick="getMenu('Putnam')">Putnam</button>
+  <button onclick="getMenu('Towers')">Towers</button>
+  <button onclick="getMenu('Northwest')">Northwest</button>
+  <button onclick="getMenu('Whitney')">Whitney</button>
+  <button onclick="getMenu('McMahon')">McMahon</button>
+  <button onclick="getMenu('South')">South</button>
 
   <p id="output"></p>
 
   <script>
-    function displayMessage(message) {
-      document.getElementById("output").textContent = message;
+    function getMenu(message) {
+        fetch('https://example.com')
+        .then(response => response.text())
+        .then(html => {
+            // Parse the HTML string into a DOM
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Extract data, e.g., all links
+            const links = Array.from(doc.querySelectorAll('a')).map(a => a.href);
+            document.getElementById("output").textContent = links
+        })
+    //   document.getElementById("output").textContent = message;
     }
   </script>
 </body>
