@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UConn Dining Menu</title>
+</head>
 <body>
   <h2>select a dining hall</h2>
 
+  <!-- Dining Hall Buttons -->
   <button onclick="getMenu('Connecticut')">Connecticut</button>
   <button onclick="getMenu('North')">North</button>
   <button onclick="getMenu('Putnam')">Putnam</button>
@@ -12,45 +17,59 @@
   <button onclick="getMenu('McMahon')">McMahon</button>
   <button onclick="getMenu('South')">South</button>
 
-  <p id="output"></p>
+  <!-- Meal Dropdown -->
+  <p>
+    <label for="mealSelect">Select a meal:</label>
+    <select id="mealSelect">
+      <option value="All">all</option>
+      <option value="Breakfast">breakfast</option>
+      <option value="Lunch">lunch</option>
+      <option value="Dinner">dinner</option>
+    </select>
+  </p>
+
+  <!-- Output -->
+  <p id="output">Menu will appear here...</p>
 
   <script>
     function getMenu(location) {
-        const options = {
-            'Connecticut': '03', 'North': '07', 'Putnam': '06',
-            'Towers': '42', 'Northwest': '15', 'Whitney': '01',
-            'McMahon': '05', 'South': '16'
-        };
+      const options = {
+        'Connecticut': '03', 'North': '07', 'Putnam': '06',
+        'Towers': '42', 'Northwest': '15', 'Whitney': '01',
+        'McMahon': '05', 'South': '16'
+      };
 
-        const locNum = options[location];
-        const meals = ['Breakfast', 'Lunch', 'Dinner'];
-        const output = document.getElementById('output');
-        output.textContent = `loading ${location} menu...`;
+      const selectedMeal = document.getElementById('mealSelect').value;
+      const locNum = options[location];
+      const output = document.getElementById('output');
+      output.textContent = `loading ${location} menu...`;
 
-        Promise.all(meals.map(meal => {
+      const mealsToFetch = selectedMeal === 'All' ? ['Breakfast', 'Lunch', 'Dinner'] : [selectedMeal];
+
+      Promise.all(mealsToFetch.map(meal => {
         const url = `https://nutritionanalysis.dds.uconn.edu/longmenu.aspx?sName=UCONN+Dining+Services&locationNum=${locNum}&naFlag=1&WeeksMenus=This+Week%27s+Menus&mealName=${meal}`;
         const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
 
         return fetch(proxyUrl)
-            .then(response => {
-                if (!response.ok) throw new Error("Network response was not ok.");
-                return response.json();
-            })
-            .then(data => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data.contents, 'text/html');
-                const items = Array.from(doc.querySelectorAll('div.longmenucoldispname a')).map(a => a.textContent.trim());
-                return { meal, items };
-            });
-        }))
-        .then(results => {
+          .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok.");
+            return response.json();
+          })
+          .then(data => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.contents, 'text/html');
+            const items = Array.from(doc.querySelectorAll('div.longmenucoldispname a')).map(a => a.textContent.trim());
+            return { meal, items };
+          });
+      }))
+      .then(results => {
         output.innerHTML = `<h3>${location.toLowerCase()} menu</h3>` + results.map(({ meal, items }) =>
-            `<strong>${meal}</strong><br>${items.join('<br>') || 'no items found'}<br><br>`
+          `<strong>${meal}</strong><br>${items.join('<br>') || 'no items found'}<br><br>`
         ).join('');
-        })
-        .catch(error => {
-            output.textContent = 'Error fetching menu: ' + error.message;
-        });
+      })
+      .catch(error => {
+        output.textContent = 'Error fetching menu: ' + error.message;
+      });
     }
   </script>
 </body>
